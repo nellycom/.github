@@ -47,15 +47,15 @@ jobs:
            $branch="${{github.ref}}".Split("/")[2]
            dotnet publish ${{inputs.projpath}}\${{inputs.projfile}} -c Release -o ${{ env.GITHUB_WORKSPACE }}/published
       
-     - name: 🐙 Octopus
-        uses: OctopusDeploy/install-octopus-cli-action@v1.1.6
-        with:
+    - name: 🐙 Octopus
+      uses: OctopusDeploy/install-octopus-cli-action@v1.1.6
+      with:
           version: latest
-     - name: 🐙 Package
-       run: |
-            $branch="${{github.ref}}".Split("/")[2]
-            octo pack --id="${{inputs.projname}}" --format="zip" --version="0.${{ github.run_number }}-$branch" --basePath="$GITHUB_WORKSPACE/published" --outFolder="$GITHUB_WORKSPACE/distoctopus"
-     - name: 🐙  Push
-       run: |
-            $branch="${{github.ref}}".Split("/")[2]
-            octo push --package="$GITHUB_WORKSPACE/distoctopus/${{inputs.projname}}.0.${{ github.run_number }}-$branch.zip" --server="${{ secrets.OCTOPUS_SERVER }}" --apiKey="${{ secrets.OCTOPUS_KEY }}"
+    - name: 🐙 Package
+      run: |
+           $branch="${{github.ref}}".Split("/")[2]
+           octo pack --id="${{inputs.projname}}" --format="zip" --version="0.${{ github.run_number }}-$branch" --basePath="$GITHUB_WORKSPACE/published" --outFolder="$GITHUB_WORKSPACE/distoctopus"
+    - name: 🐙  Push
+      run: |
+           $branch="${{github.ref}}".Split("/")[2]
+           octo push --package="$GITHUB_WORKSPACE/distoctopus/${{inputs.projname}}.0.${{ github.run_number }}-$branch.zip" --server="${{ secrets.OCTOPUS_SERVER }}" --apiKey="${{ secrets.OCTOPUS_KEY }}"
