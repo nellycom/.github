@@ -29,7 +29,7 @@ on:
         required: true
       OCTOPUS_SERVER:
         required: true
-      NUGET_RESTORE_SOURCES:
+      NUGET_RESOURCE_SOURCES:
         required: true
 
 jobs:       
@@ -40,7 +40,7 @@ jobs:
       name: Checkout Code
         
     - name: Restore NuGet Packages
-      run: dotnet restore ${{inputs.projpath}}\${{inputs.projfile}} -source "${{secrets.NUGET_RESTORE_SOURCES}}"
+      run: dotnet restore ${{inputs.projpath}}\${{inputs.projfile}} -source "${{secrets.NUGET_RESOURCE_SOURCES}}"
     
     - name: Build and Publish App 
       run: |
