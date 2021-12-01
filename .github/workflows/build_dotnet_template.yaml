@@ -1,0 +1,61 @@
+name: publish package
+
+on:
+  workflow_call:
+    inputs:
+     projname:
+        description: 'The name for octo'
+        default: 'MISSING PROJECT NAME'
+        required: true
+        type: string
+      projfile:
+        description: 'The project file to be built'
+        default: 'MISSING PROJECT FILE'
+        required: true
+        type: string
+      projpath:
+        description: 'The project path'
+        default: 'MISSING PROJECT PATH'
+        required: true
+        type: string
+      solutionfile:
+        description: 'The solution file'
+        default: ''
+        required: false
+        type: string
+
+    secrets:
+      OCTOPUS_KEY: 
+        required: true
+      OCTOPUS_SERVER:
+        required: true
+      NUGET_RESTORE_SOURCES:
+        required: true
+
+jobs:       
+  pack-and-push:
+    runs-on: [self-hosted, windows]
+    steps:
+    - uses: actions/checkout@v1
+      name: Checkout Code
+        
+    - name: Restore NuGet Packages
+      run: dotnet restore ${{inputs.projpath}}\${{inputs.projfile}} -source "${{secrets.NUGET_RESTORE_SOURCES}}"
+    
+    - name: Build and Publish App 
+      run: |
+           $branch="${{github.ref}}".Split("/")[2]
+           dotnet publish ${{inputs.projpath}}\${{inputs.projfile}} -c Release -o ${{ env.GITHUB_WORKSPACE }}/published
+      
+     - name: 🐙 Octopus
+        uses: OctopusDeploy/install-octopus-cli-action@v1.1.6
+        with:
+          version: latest
+     - name: 🐙 Package
+       run: |
+            $branch="${{github.ref}}".Split("/")[2]
+            octo pack --id="${{inputs.projname}}" --format="zip" --version="0.${{ github.run_number }}-$branch" --basePath="$GITHUB_WORKSPACE/published" --outFolder="$GITHUB_WORKSPACE/distoctopus"
+     - name: 🐙  Push
+       run: |
+            $branch="${{github.ref}}".Split("/")[2]
+            octo push --package="$GITHUB_WORKSPACE/distoctopus/${{inputs.projname}}.0.${{ github.run_number }}-$branch.zip" --server="${{ secrets.OCTOPUS_SERVER }}" --apiKey="${{ secrets.OCTOPUS_KEY }}"
