@@ -24,7 +24,7 @@ on:
     secrets:
       OCTOPUS_KEY: 
         required: true
-      OCTOPUS_SERVER:
+      OCTOPUS_NUGET_SERVER:
         required: true
       NUGET_SOURCES:
         required: true
@@ -51,5 +51,5 @@ jobs:
       if: ${{ inputs.useprecompile == false }}
       run: |
            $branch="${{github.ref}}".Split("/")[2]
-           msbuild ${{inputs.projpath}}\${{inputs.projfile}} /p:Configuration=Release /t:Rebuild /p:RunOctoPack=true /p:OctoPackPackageVersion=0.${{ github.run_number }}-$branch  /p:OctoPackPublishPackageToHttp=${{ secrets.OCTOPUS_SERVER }} /p:DeployOnBuild=true /p:OctoPackPublishApiKey=${{secrets.OCTOPUS_KEY}}
+           msbuild ${{inputs.projpath}}\${{inputs.projfile}} /p:Configuration=Release /t:Rebuild /p:RunOctoPack=true /p:OctoPackPackageVersion=0.${{ github.run_number }}-$branch  /p:OctoPackPublishPackageToHttp=${{ secrets.OCTOPUS_NUGET_SERVER }} /p:DeployOnBuild=true /p:OctoPackPublishApiKey=${{secrets.OCTOPUS_KEY}}
       
