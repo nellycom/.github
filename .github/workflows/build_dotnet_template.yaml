@@ -3,7 +3,7 @@ name: publish package
 on:
   workflow_call:
     inputs:
-     projname:
+      projname:
         description: 'The name for octo'
         default: 'MISSING PROJECT NAME'
         required: true
