@@ -1,0 +1,55 @@
+name: publish package
+
+on:
+  workflow_call:
+    inputs:
+      projfile:
+        description: 'The project file to be built'
+        default: 'MISSING PROJECT FILE'
+        required: true
+        type: string
+      projpath:
+        description: 'The project path'
+        default: 'MISSING PROJECT PATH'
+        required: false
+        type: string
+      solutionfile:
+        description: 'The solution file'
+        default: ''
+        required: false
+        type: string
+
+        
+
+    secrets:
+      OCTOPUS_KEY: 
+        required: true
+      OCTOPUS_SERVER:
+        required: true
+      NUGET_SOURCES:
+        required: true
+
+jobs:       
+  pack-and-push:
+    runs-on: [self-hosted, windows]
+    steps:
+    - uses: actions/checkout@v1
+      name: Checkout Code
+         
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1
+    
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+        
+    - name: Restore NuGet Packages
+      run: nuget restore ${{ inputs.solutionfile}} -source "${{secrets.NUGET_SOURCES}}"
+    
+    - name: Build and Publish App 
+      if: ${{ inputs.useprecompile == false }}
+      run: |
+           $branch="${{github.ref}}".Split("/")[2]
+           msbuild ${{inputs.projpath}}\${{inputs.projfile}} /p:Configuration=Release /t:Rebuild /p:RunOctoPack=true /p:OctoPackPackageVersion=0.${{ github.run_number }}-$branch  /p:OctoPackPublishPackageToHttp=${{ secrets.OCTOPUS_SERVER }} /p:DeployOnBuild=true /p:OctoPackPublishApiKey=${{secrets.OCTOPUS_KEY}}
+      
