@@ -11,7 +11,7 @@ on:
     secrets:
       NUGET_SOURCE_MYGET: 
         required: true
-      NUGET_SOURCE: 
+      NUGET_SOURCES: 
         required: true
       MYGET_FEED_SERVER:
         required: true
