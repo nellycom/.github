@@ -46,7 +46,7 @@ jobs:
         IFS="," read -a myarray <<< ${{inputs.testprojects}}
         for i in "${myarray[@]}"; do
           echo "Value: ${i}"
-          dotnet restore ${{inputs.testprojects}} --source ${{secrets.NUGET_SOURCE_MYGET}} --source https://api.nuget.org/v3/index.json
+          dotnet restore ${i} --source ${{secrets.NUGET_SOURCE_MYGET}} --source https://api.nuget.org/v3/index.json
           dotnet test ${i}
         done
    
