@@ -1,0 +1,16 @@
+name: KeywordExporter
+ 
+on:  
+  workflow_dispatch:
+
+jobs:
+ call-reusable-nuget-push:
+    uses: nellycom/.github/.github/workflows/build_template.yaml@master
+    with:
+      projfile: KeywordExporter.csproj
+      projpath: ElasticExporters/KeywordExporter
+      solutionfile: ElasticExporters/ElasticExporters.sln
+    secrets:
+      OCTOPUS_NUGET_SERVER: ${{secrets.OCTOPUS_NUGET_SERVER}} 
+      OCTOPUS_KEY: ${{secrets.OCTOPUS_KEY}}
+      NUGET_SOURCES: ${{secrets.NUGET_SOURCES}}
