@@ -1,4 +1,4 @@
-name: publish nuget
+name: publish frmamework nuget
 
 on:
   workflow_call:
@@ -10,6 +10,8 @@ on:
         type: string
     secrets:
       NUGET_SOURCE_MYGET: 
+        required: true
+      NUGET_RESOURCE_SOURCE: 
         required: true
       MYGET_FEED_SERVER:
         required: true
@@ -24,27 +26,34 @@ on:
 
 jobs:
   pack-and-push:
-    runs-on: [self-hosted, linux]
+    runs-on: [self-hosted, windows]
+
     steps:
     - uses: actions/checkout@v1
       name: Checkout Code
      
-    - uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.x'
-      name: Setup dotnet
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1
+     
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      
+    - name: Build 
+      run: msbuild ${{inputs.projfile}} /p:Configuration=Release /t:Rebuild /p:RestoreSources=${{secrets.NUGET_RESOURCE_SOURCE}} 
 
     - name: pack project 
       run: >
-        dotnet pack ${{ inputs.projfile }} 
-        /p:Configuration=Release 
-        --source ${{secrets.NUGET_SOURCE_MYGET}}  
-        --source https://api.nuget.org/v3/index.json
-        --include-source 
-        -o ./.pub
+        nuget pack ${{inputs.projfile}} 
+        -Prop Configuration=Release 
+        -PackagesDirectory packages 
+        -version 1.0.${{ github.run_number }}
+        -OutputDirectory pub
+      
     - name: Publish the package to proget
       run: >
-        dotnet nuget push ./.pub/*.nupkg 
+        dotnet nuget push pub/*.nupkg 
         --source ${{secrets.MYGET_FEED_SERVER}} 
         --api-key ${{secrets.MYGET_API_KEY}} 
         --symbol-source ${{secrets.MYGET_SYMBOLS_FEED_SERVER}} 
