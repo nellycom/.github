@@ -40,9 +40,13 @@ jobs:
         dotnet-version: '5.0.x'
       name: Setup dotnet
    
+    - name: Restore nugets for tests
+      if: ${{ inputs.testprojects != '' }}
+      run: dotnet restore ${{inputs.testprojects}} --source ${{secrets.NUGET_SOURCE_MYGET}} --source https://api.nuget.org/v3/index.json
+      
     - name: Run tests 
       if: ${{ inputs.testprojects != '' }}
-      run: dotnet test ${{inputs.testprojects}} --source ${{secrets.NUGET_SOURCE_MYGET}} --source https://api.nuget.org/v3/index.json
+      run: dotnet test ${{inputs.testprojects}} 
       
     - name: pack project 
       run: >
