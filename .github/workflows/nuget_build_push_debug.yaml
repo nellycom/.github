@@ -1,0 +1,54 @@
+name: publish nuget
+
+on:
+  workflow_call:
+    inputs:
+      projfile:
+        description: 'The path to the project file to be built'
+        default: 'MISSING PROJECT FILE'
+        required: true
+        type: string
+      testprojects:
+        description: 'test projects to be run'
+        default: ''
+        required: false
+        type: string
+        
+    secrets:
+      NUGET_SOURCE_MYGET: 
+        required: true
+      MYGET_FEED_SERVER:
+        required: true
+      MYGET_API_KEY:
+        required: true
+      MYGET_SYMBOLS_FEED_SERVER:
+        required: true
+      MYGET_SYMBOLS_API_KEY:
+        required: true
+
+
+
+jobs:
+  pack-and-push:
+    runs-on: [self-hosted, linux]
+    steps:
+    - uses: actions/checkout@v1
+      name: Checkout Code
+     
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+      name: Setup dotnet
+   
+    - name: Run tests 
+      if: ${{ inputs.testprojects != '' }}
+      run: dotnet test ${{inputs.testprojects}} --source ${{secrets.NUGET_SOURCE_MYGET}} --source https://api.nuget.org/v3/index.json
+      
+    - name: pack project 
+      run: >
+        dotnet pack ${{ inputs.projfile }} 
+        /p:Configuration=Release 
+        --source ${{secrets.NUGET_SOURCE_MYGET}}  
+        --source https://api.nuget.org/v3/index.json
+        --include-source 
+        -o ./.pub
