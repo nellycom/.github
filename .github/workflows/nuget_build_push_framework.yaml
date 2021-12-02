@@ -51,12 +51,12 @@ jobs:
         nuget pack ${{inputs.projfile}} 
         -Prop Configuration=Release 
         -PackagesDirectory packages 
-        -version 1.0.${{ github.run_number }}
+        -version 3.0.${{ github.run_number }}
         -OutputDirectory pub
       
     - name: Publish the package to myget
       run: >
-        dotnet nuget push pubs/*.nupkg 
+        dotnet nuget push pub/*.nupkg 
         --source ${{secrets.MYGET_FEED_SERVER}} 
         --api-key ${{secrets.MYGET_API_KEY}} 
         --symbol-source ${{secrets.MYGET_SYMBOLS_FEED_SERVER}} 
