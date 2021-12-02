@@ -39,7 +39,12 @@ jobs:
       with:
         dotnet-version: '5.0.x'
       name: Setup dotnet
-   
+    
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.0.000
+        
     - name: Restore nugets for tests
       if: ${{ inputs.testprojects != '' }}
       run: dotnet restore ${{inputs.testprojects}} --source ${{secrets.NUGET_SOURCE_MYGET}} --source https://api.nuget.org/v3/index.json
