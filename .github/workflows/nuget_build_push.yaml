@@ -8,6 +8,12 @@ on:
         default: 'MISSING PROJECT FILE'
         required: true
         type: string
+      testprojects:
+        description: 'test projects to be run'
+        default: ''
+        required: false
+        type: string
+        
     secrets:
       NUGET_SOURCE_MYGET: 
         required: true
@@ -33,7 +39,11 @@ jobs:
       with:
         dotnet-version: '5.0.x'
       name: Setup dotnet
-
+   
+    - name: Run tests 
+      if: ${{ inputs.testprojects != '' }}
+      run: dotnet test ${{inputs.testprojects}} --source ${{secrets.NUGET_SOURCE_MYGET}} --source https://api.nuget.org/v3/index.json
+      
     - name: pack project 
       run: >
         dotnet pack ${{ inputs.projfile }} 
