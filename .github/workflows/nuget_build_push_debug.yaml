@@ -39,20 +39,20 @@ jobs:
       with:
         dotnet-version: '5.0.x'
       name: Setup dotnet
-    
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '2.1.x'
         
     - name: Restore nugets for tests
       if: ${{ inputs.testprojects != '' }}
       run: dotnet restore ${{inputs.testprojects}} --source ${{secrets.NUGET_SOURCE_MYGET}} --source https://api.nuget.org/v3/index.json
-      
+   
     - name: Run tests 
       if: ${{ inputs.testprojects != '' }}
-      run: dotnet test ${{inputs.testprojects}} 
-      
+      run: |
+        IFS="," read -a myarray <<< ${{inputs.testprojects}}
+        for i in "${myarray[@]}"; do
+          echo "Value: ${i}"
+          dotnet test ${i}
+        done
+   
     - name: pack project 
       run: >
         dotnet pack ${{ inputs.projfile }} 
