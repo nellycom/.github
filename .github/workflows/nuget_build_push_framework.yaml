@@ -24,8 +24,6 @@ on:
         required: false
         type: string      
     secrets:
-      NUGET_SOURCE_MYGET: 
-        required: true
       NUGET_SOURCES: 
         required: true
       MYGET_FEED_SERVER:
