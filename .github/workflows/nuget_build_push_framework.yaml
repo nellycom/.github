@@ -59,7 +59,7 @@ jobs:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       
     - name: Restore NuGet Packages
-      run: nuget restore ${{ inputs.solutionfile}} -source "${{secrets.NUGET_SOURCES}}"
+      run: nuget restore ${{ inputs.solutionfile}} -source "${{secrets.NUGET_SOURCES}}" -OutputDirectory packages
   
     - name: Build tests 
       if: ${{ inputs.testproject != '' }}
