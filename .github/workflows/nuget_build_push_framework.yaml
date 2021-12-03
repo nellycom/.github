@@ -77,7 +77,7 @@ jobs:
         nuget pack ${{inputs.projfile}} 
         -Prop Configuration=Release 
         -version 3.0.${{ github.run_number }}
-        -OutputDirectory pub
+        -OutputDirectory {{ github.workspace }}/pub
       
     - name: Publish the package to myget
       if: ${{ inputs.pushtomyget == true }}
