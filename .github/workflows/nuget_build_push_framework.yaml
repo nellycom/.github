@@ -13,6 +13,16 @@ on:
         default: true
         required: false
         type: boolean
+      testproject:
+        description: 'Test project'
+        default: ''
+        required: false
+        type: string
+      testassembly:
+        description: 'test assembly to test'
+        default: ''
+        required: false
+        type: string      
     secrets:
       NUGET_SOURCE_MYGET: 
         required: true
@@ -47,6 +57,14 @@ jobs:
       
     - name: Restore NuGet Packages
       run: nuget restore ${{ inputs.solutionfile}} -source "${{secrets.NUGET_SOURCES}}"
+  
+    - name: Build tests 
+      if: ${{ inputs.testproject != '' }}
+      run: msbuild ${{inputs.testproject}} /p:Configuration=Release
+      
+    - name: Run tests 
+      if: ${{ inputs.testassembly != '' }}
+      run: dotnet vstest ${{inputs.testassembly}}
       
     - name: Build 
       run: msbuild ${{inputs.projfile}} /p:Configuration=Release /t:Rebuild
