@@ -8,6 +8,11 @@ on:
         default: 'MISSING PROJECT FILE'
         required: true
         type: string
+      pushtomyget:
+        description: 'If we shall push the nuget to myget'
+        default: true
+        required: false
+        type: boolean
     secrets:
       NUGET_SOURCE_MYGET: 
         required: true
@@ -55,6 +60,7 @@ jobs:
         -OutputDirectory pub
       
     - name: Publish the package to myget
+      if: ${{ inputs.pushtomyget == true }}
       run: >
         dotnet nuget push pub/*.nupkg 
         --source ${{secrets.MYGET_FEED_SERVER}} 
