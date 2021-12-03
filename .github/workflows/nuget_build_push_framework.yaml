@@ -59,7 +59,7 @@ jobs:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       
     - name: Restore NuGet Packages
-      run: nuget restore ${{ inputs.solutionfile}} -source "${{secrets.NUGET_SOURCES}}" -OutputDirectory packages
+      run: nuget restore ${{ inputs.solutionfile}} -source "${{secrets.NUGET_SOURCES}}" 
   
     - name: Build tests 
       if: ${{ inputs.testproject != '' }}
@@ -76,7 +76,6 @@ jobs:
       run: >
         nuget pack ${{inputs.projfile}} 
         -Prop Configuration=Release 
-        -PackagesDirectory packages 
         -version 3.0.${{ github.run_number }}
         -OutputDirectory pub
       
