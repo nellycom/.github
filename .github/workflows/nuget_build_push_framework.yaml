@@ -8,6 +8,11 @@ on:
         default: 'MISSING PROJECT FILE'
         required: true
         type: string
+      solutionfile:
+        description: 'The solution file'
+        default: ''
+        required: false
+        type: string
       pushtomyget:
         description: 'If we shall push the nuget to myget'
         default: true
