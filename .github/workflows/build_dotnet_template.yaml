@@ -58,4 +58,4 @@ jobs:
     - name: 🐙  Push
       run: |
            $branch="${{github.ref}}".Split("/")[2]
-           octo push --package="$GITHUB_WORKSPACE/distoctopus/${{inputs.projname}}.0.${{ github.run_number }}-$branch.zip" --server="${{ secrets.OCTOPUS_SERVER }}" --apiKey="${{ secrets.OCTOPUS_KEY }}"
+           octo push --package="$GITHUB_WORKSPACE/distoctopus/${{inputs.projname}}.3.${{ github.run_number }}-$branch.zip" --server="${{ secrets.OCTOPUS_SERVER }}" --apiKey="${{ secrets.OCTOPUS_KEY }}"
