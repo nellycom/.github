@@ -18,7 +18,7 @@ on:
         default: true
         required: false
         type: boolean
-      dotnetverion:
+      dotnetversion:
         description: 'If we shall push the nuget to myget'
         default: '5.0.x'
         required: false
