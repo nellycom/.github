@@ -87,7 +87,7 @@ jobs:
     - name: Publish the package to myget
       if: ${{ inputs.pushtomyget == true }}
       run: >
-        dotnet nuget push pub/*.nupkg 
+        dotnet nuget push pub\*.nupkg 
         --source ${{secrets.MYGET_FEED_SERVER}} 
         --api-key ${{secrets.MYGET_API_KEY}} 
         --symbol-source ${{secrets.MYGET_SYMBOLS_FEED_SERVER}} 
