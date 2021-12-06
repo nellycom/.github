@@ -18,6 +18,11 @@ on:
         default: true
         required: false
         type: boolean
+      dotnetverion:
+        description: 'If we shall push the nuget to myget'
+        default: '5.0.x'
+        required: false
+        type: string      
         
     secrets:
       NUGET_SOURCE_MYGET: 
