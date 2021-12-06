@@ -54,7 +54,7 @@ jobs:
     - name: 🐙 Package
       run: |
            $branch="${{github.ref}}".Split("/")[2]
-           octo pack --id="${{inputs.projname}}" --format="zip" --version="0.${{ github.run_number }}-$branch" --basePath="$GITHUB_WORKSPACE/published" --outFolder="$GITHUB_WORKSPACE/distoctopus"
+           octo pack --id="${{inputs.projname}}" --format="zip" --version="3.${{ github.run_number }}-$branch" --basePath="$GITHUB_WORKSPACE/published" --outFolder="$GITHUB_WORKSPACE/distoctopus"
     - name: 🐙  Push
       run: |
            $branch="${{github.ref}}".Split("/")[2]
