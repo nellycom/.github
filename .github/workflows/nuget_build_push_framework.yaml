@@ -79,11 +79,6 @@ jobs:
         -version 3.0.${{ github.run_number }}
         -OutputDirectory pub
 
-    - name: where 
-      run: |
-           cd
-           ls
-
     - name: Publish the package to myget
       if: ${{ inputs.pushtomyget == true }}
       run: >
