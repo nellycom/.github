@@ -72,7 +72,7 @@ jobs:
     - name: Publish the package to proget
       if: ${{ inputs.pushtomyget == true }}
       run: >
-        nupkg=./.pub/$(ls | grep -Po '.+(?<!symbols.nupkg)$')
+        nupkg=./.pub/$(ls ./.pub | grep -Po '.+(?<!symbols.nupkg)$')
         
         dotnet nuget push $nupkg 
         --source ${{secrets.MYGET_FEED_SERVER}} 
