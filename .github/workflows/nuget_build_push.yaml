@@ -73,6 +73,7 @@ jobs:
       if: ${{ inputs.pushtomyget == true }}
       run: >
         nupkg=./.pub/$(ls | grep -Po '.+(?<!symbols.nupkg)$')
+        
         dotnet nuget push $nupkg 
         --source ${{secrets.MYGET_FEED_SERVER}} 
         --api-key ${{secrets.MYGET_API_KEY}} 
