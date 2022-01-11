@@ -49,7 +49,7 @@ jobs:
       with:
         dotnet-version: ${{ inputs.dotnetversion }} 
       name: Setup dotnet
-   
+      
     - name: Run tests 
       if: ${{ inputs.testprojects != '' }}
       run: |
@@ -72,7 +72,8 @@ jobs:
     - name: Publish the package to proget
       if: ${{ inputs.pushtomyget == true }}
       run: >
-        dotnet nuget push ./.pub/*.nupkg 
+        nupkg=./.pub/$(ls | grep -Po '.+(?<!symbols.nupkg)$')
+        dotnet nuget push $nupkg 
         --source ${{secrets.MYGET_FEED_SERVER}} 
         --api-key ${{secrets.MYGET_API_KEY}} 
         --symbol-source ${{secrets.MYGET_SYMBOLS_FEED_SERVER}} 
