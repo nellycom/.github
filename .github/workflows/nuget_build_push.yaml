@@ -76,6 +76,5 @@ jobs:
         --source ${{secrets.MYGET_FEED_SERVER}} 
         --api-key ${{secrets.MYGET_API_KEY}} 
         --symbol-source ${{secrets.MYGET_SYMBOLS_FEED_SERVER}} 
-        -sk ${{secrets.MYGET_SYMBOLS_API_KEY}} 
-        --skip-duplicate
+        -sk ${{secrets.MYGET_SYMBOLS_API_KEY}}
         
