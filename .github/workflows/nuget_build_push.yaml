@@ -40,7 +40,7 @@ on:
 
 jobs:
   pack-and-push:
-    runs-on: [self-hosted, linux, onprem]
+    runs-on: [self-hosted, linux]
     steps:
     - uses: actions/checkout@v1
       name: Checkout Code
