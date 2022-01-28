@@ -22,7 +22,12 @@ on:
         description: 'The solution file'
         default: ''
         required: false
-        type: string
+        type: string        
+      majorversion:
+        description: 'The first number in the nuget version'
+        default: 3
+        required: false
+        type: number
 
     secrets:
       OCTOPUS_KEY: 
@@ -54,8 +59,8 @@ jobs:
     - name: 🐙 Package
       run: |
            $branch="${{github.ref}}".Split("/")[2]
-           octo pack --id="${{inputs.projname}}" --format="zip" --version="3.${{ github.run_number }}-$branch" --basePath="$GITHUB_WORKSPACE/published" --outFolder="$GITHUB_WORKSPACE/distoctopus"
+           octo pack --id="${{inputs.projname}}" --format="zip" --version="${{ inputs.majorversion }}.${{ github.run_number }}-$branch" --basePath="$GITHUB_WORKSPACE/published" --outFolder="$GITHUB_WORKSPACE/distoctopus"
     - name: 🐙  Push
       run: |
            $branch="${{github.ref}}".Split("/")[2]
-           octo push --package="$GITHUB_WORKSPACE/distoctopus/${{inputs.projname}}.3.${{ github.run_number }}-$branch.zip" --server="${{ secrets.OCTOPUS_SERVER }}" --apiKey="${{ secrets.OCTOPUS_KEY }}"
+           octo push --package="$GITHUB_WORKSPACE/distoctopus/${{inputs.projname}}.${{ inputs.majorversion }}.${{ github.run_number }}-$branch.zip" --server="${{ secrets.OCTOPUS_SERVER }}" --apiKey="${{ secrets.OCTOPUS_KEY }}"
