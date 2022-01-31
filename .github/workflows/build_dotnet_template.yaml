@@ -49,9 +49,9 @@ jobs:
     
     - name: Build and Publish App 
       run: |
-           $pubFolder="${{ env.GITHUB_WORKSPACE }}/published/${{inputs.projname}}.${{ inputs.majorversion }}.${{ github.run_number }}-$branch/"
            $branch="${{github.ref}}".Split("/")[2]
-           dotnet publish ${{inputs.projpath}}\${{inputs.projfile}} -c Release -o ${{ env.GITHUB_WORKSPACE }}/published/${{inputs.projname}}.${{ inputs.majorversion }}.${{ github.run_number }}-$branch/$pubFolder
+           $pubFolder="${{ env.GITHUB_WORKSPACE }}/published/${{inputs.projname}}.${{ inputs.majorversion }}.${{ github.run_number }}-$branch/"
+           dotnet publish ${{inputs.projpath}}\${{inputs.projfile}} -c Release -o $branch/$pubFolder
       
     - name: 🐙 Octopus
       uses: OctopusDeploy/install-octopus-cli-action@v1.1.6
@@ -59,8 +59,8 @@ jobs:
           version: latest
     - name: 🐙 Package
       run: |
-           $pubFolder="${{ env.GITHUB_WORKSPACE }}/published/${{inputs.projname}}.${{ inputs.majorversion }}.${{ github.run_number }}-$branch/"
            $branch="${{github.ref}}".Split("/")[2]
+           $pubFolder="${{ env.GITHUB_WORKSPACE }}/published/${{inputs.projname}}.${{ inputs.majorversion }}.${{ github.run_number }}-$branch/"
            octo pack --id="${{inputs.projname}}" --format="zip" --version="${{ inputs.majorversion }}.${{ github.run_number }}-$branch" --basePath="$pubFolder" --outFolder="$GITHUB_WORKSPACE/distoctopus"
     - name: 🐙  Push
       run: |
