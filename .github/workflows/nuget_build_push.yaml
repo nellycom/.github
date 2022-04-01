@@ -69,7 +69,7 @@ jobs:
         --include-source 
         -o ./.pub
 
-    - name: Publish the package to proget
+    - name: Publish the package to myget
       if: ${{ inputs.pushtomyget == true }}
       run: >
         nupkg=./.pub/$(ls ./.pub | grep -Po '.+(?<!symbols.nupkg)$')
