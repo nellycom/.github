@@ -30,7 +30,7 @@ on:
         type: string      
     secrets:
       NUGET_SOURCES: 
-        required: false
+        required: true
       MYGET_FEED_SERVER:
         required: true
       MYGET_API_KEY:
